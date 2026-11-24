@@ -1,0 +1,6 @@
+{
+  "name": "رسالة حب إلى تسنيم",
+  "description": "تجربة تفاعلية رومانسية أنيقة باللغة العربية مع مؤثرات بصرية وقطار ذكريات خاص لتسنيم.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

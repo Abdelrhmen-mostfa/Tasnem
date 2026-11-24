@@ -1,0 +1,1718 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>بحبك يا تسنيم | رسالة خاصة</title>
+    <meta name="description" content="تجربة تفاعلية رومانسية أنيقة باللغة العربية مع مؤثرات بصرية وقطار ذكريات خاص لتسنيم." />
+    <meta property="og:title" content="بحبك يا تسنيم | رسالة خاصة" />
+    <meta property="og:description" content="تجربة تفاعلية رومانسية أنيقة باللغة العربية مع مؤثرات بصرية وقطار ذكريات خاص لتسنيم." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-cream: #fff9f4;
+        --bg-blush: #fbe9e5;
+        --bg-champagne: #f6e4cf;
+        --ink-primary: #3b1722;
+        --ink-secondary: #6e3d49;
+        --gold-primary: #d4a14d;
+        --gold-bright: #f2cf84;
+        --gold-deep: #9c6b21;
+        --rose-accent: #c94a61;
+        --glass-bg: rgba(255, 250, 246, 0.56);
+        --glass-border: rgba(255, 255, 255, 0.78);
+        --glass-rose-edge: rgba(210, 152, 142, 0.35);
+        --shadow-ambient: rgba(112, 48, 56, 0.14);
+        --wheel-rot: 0rad;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: var(--bg-cream);
+        color: var(--ink-primary);
+        font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        user-select: none;
+      }
+
+      /* Warm Ambient Scene Background */
+      .scene-stage {
+        position: relative;
+        width: 100%;
+        height: 100dvh;
+        min-height: 540px;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse 90% 70% at 20% 18%, rgba(255, 233, 224, 0.92) 0%, rgba(255, 233, 224, 0) 68%),
+          radial-gradient(ellipse 80% 65% at 82% 24%, rgba(247, 222, 186, 0.72) 0%, rgba(247, 222, 186, 0) 64%),
+          radial-gradient(ellipse 100% 75% at 50% 92%, rgba(244, 208, 204, 0.65) 0%, rgba(244, 208, 204, 0) 70%),
+          linear-gradient(155deg, #fffaf6 0%, #fdf1ec 46%, #f9e8df 100%);
+      }
+
+      /* Subtle Ambient Golden/Rose Light Blooms (GPU-composited) */
+      .ambient-glow {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        will-change: transform, opacity;
+        filter: blur(48px);
+      }
+
+      .ambient-glow--gold {
+        width: min(56vw, 560px);
+        height: min(56vw, 560px);
+        top: -12%;
+        right: -8%;
+        background: radial-gradient(circle, rgba(242, 203, 132, 0.34) 0%, rgba(242, 203, 132, 0) 70%);
+        animation: glowDriftA 14s ease-in-out infinite alternate;
+      }
+
+      .ambient-glow--rose {
+        width: min(62vw, 620px);
+        height: min(62vw, 620px);
+        bottom: -18%;
+        left: -10%;
+        background: radial-gradient(circle, rgba(235, 168, 174, 0.32) 0%, rgba(235, 168, 174, 0) 72%);
+        animation: glowDriftB 16s ease-in-out infinite alternate;
+      }
+
+      .ambient-glow--center {
+        width: min(70vw, 680px);
+        height: min(44vw, 420px);
+        top: 22%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: radial-gradient(ellipse, rgba(255, 244, 230, 0.85) 0%, rgba(255, 244, 230, 0) 72%);
+        opacity: 0.75;
+      }
+
+      @keyframes glowDriftA {
+        0% {
+          transform: translate3d(0, 0, 0) scale(1);
+          opacity: 0.75;
+        }
+        100% {
+          transform: translate3d(-28px, 22px, 0) scale(1.08);
+          opacity: 0.95;
+        }
+      }
+
+      @keyframes glowDriftB {
+        0% {
+          transform: translate3d(0, 0, 0) scale(1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: translate3d(26px, -24px, 0) scale(1.06);
+          opacity: 0.92;
+        }
+      }
+
+      /* Particle Canvases */
+      .stage-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      #bgCanvas {
+        z-index: 2;
+      }
+
+      #fxCanvas {
+        z-index: 24;
+      }
+
+      /* Opening Frosted-Glass Greeting Card */
+      .greeting-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        pointer-events: none;
+      }
+
+      .glass-card {
+        position: relative;
+        width: min(92vw, 640px);
+        padding: clamp(26px, 4.5vw, 44px) clamp(24px, 5vw, 52px);
+        border-radius: 26px;
+        background:
+          linear-gradient(
+            145deg,
+            rgba(255, 253, 250, 0.74) 0%,
+            rgba(255, 245, 242, 0.56) 55%,
+            rgba(253, 238, 228, 0.52) 100%
+          );
+        backdrop-filter: blur(22px) saturate(1.38);
+        -webkit-backdrop-filter: blur(22px) saturate(1.38);
+        border: 1px solid var(--glass-border);
+        box-shadow:
+          0 28px 60px -18px rgba(102, 42, 54, 0.16),
+          0 10px 24px -8px rgba(176, 118, 86, 0.12),
+          0 0 0 1px rgba(212, 161, 77, 0.18),
+          inset 0 1.5px 1px rgba(255, 255, 255, 0.92),
+          inset 0 -1px 2px rgba(214, 158, 148, 0.18);
+        text-align: center;
+        opacity: 0;
+        transform: translate3d(0, 18px, 0) scale(0.95);
+        transition:
+          opacity 1.15s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 1.25s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform, opacity;
+      }
+
+      .glass-card::before {
+        content: '';
+        position: absolute;
+        inset: 8px;
+        border-radius: 19px;
+        border: 1px solid rgba(212, 161, 77, 0.22);
+        pointer-events: none;
+      }
+
+      .glass-card.is-visible {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      /* Gently elevates card to upper-center when train arrives so track & carriages have clear space */
+      .glass-card.is-visible.is-elevated {
+        transform: translate3d(0, calc(-17vh), 0) scale(0.94);
+      }
+
+      .card-ornament {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 14px;
+        opacity: 0.88;
+      }
+
+      .ornament-line {
+        width: 44px;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(212, 161, 77, 0) 0%, rgba(204, 146, 62, 0.72) 50%, rgba(212, 161, 77, 0) 100%);
+      }
+
+      .ornament-heart {
+        width: 16px;
+        height: 16px;
+        filter: drop-shadow(0 2px 5px rgba(201, 74, 97, 0.32));
+      }
+
+      .greeting-title {
+        font-family: 'Amiri', 'Cairo', serif;
+        font-weight: 700;
+        font-size: clamp(1.68rem, 4vw, 2.75rem);
+        line-height: 1.55;
+        color: var(--ink-primary);
+        text-wrap: balance;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+        letter-spacing: 0;
+      }
+
+      .greeting-title .highlight-name {
+        color: #9e273e;
+        background: linear-gradient(135deg, #9e273e 0%, #c43c55 55%, #b57b28 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+      }
+
+      .card-ornament--bottom {
+        margin-top: 14px;
+        margin-bottom: 0;
+      }
+
+      /* =======================================================
+         TRAIN SCENE (Lower-Middle Section, Explicit LTR Track)
+         ======================================================= */
+      .train-stage {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 63%;
+        transform: translateY(-50%);
+        height: 210px;
+        z-index: 15;
+        direction: ltr;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.7s ease-out;
+      }
+
+      .train-stage.is-active {
+        opacity: 1;
+      }
+
+      /* Subtle Architectural Railway Track */
+      .railway-track {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 24px;
+        height: 22px;
+      }
+
+      .track-shadow {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -6px;
+        height: 14px;
+        background: radial-gradient(ellipse 70% 100% at 50% 0%, rgba(92, 46, 52, 0.16) 0%, rgba(92, 46, 52, 0) 78%);
+      }
+
+      .track-ties {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 2px;
+        height: 7px;
+        background-image: repeating-linear-gradient(
+          90deg,
+          rgba(124, 92, 84, 0.42) 0px,
+          rgba(124, 92, 84, 0.42) 10px,
+          transparent 10px,
+          transparent 28px
+        );
+        border-radius: 2px;
+      }
+
+      .track-ballast {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(168, 128, 118, 0.08), rgba(146, 108, 98, 0.32), rgba(168, 128, 118, 0.08));
+      }
+
+      .track-rail {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 8px;
+        height: 4px;
+        background: linear-gradient(
+          180deg,
+          #f5ede9 0%,
+          #c9b8b3 35%,
+          #7f6b67 75%,
+          #5c4a47 100%
+        );
+        box-shadow: 0 2px 6px rgba(74, 34, 40, 0.16);
+      }
+
+      /* Moving Train Consist */
+      .train-consist {
+        position: absolute;
+        left: 0;
+        bottom: 35px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        will-change: transform;
+        transform: translate3d(120vw, 0, 0);
+      }
+
+      /* Subtle contact shadow under entire train */
+      .car-wrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      .car-ground-shadow {
+        position: absolute;
+        bottom: -7px;
+        left: 6%;
+        right: 6%;
+        height: 11px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at center, rgba(64, 24, 32, 0.34) 0%, rgba(64, 24, 32, 0) 75%);
+        filter: blur(2px);
+        z-index: 0;
+      }
+
+      /* Flexible Inter-Car Couplers */
+      .coupler {
+        position: relative;
+        width: 18px;
+        height: 26px;
+        margin-bottom: 18px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .coupler-bellows {
+        width: 16px;
+        height: 36px;
+        margin-bottom: 10px;
+        border-radius: 3px;
+        background: repeating-linear-gradient(
+          90deg,
+          #4d3c40 0px,
+          #4d3c40 3px,
+          #6f5b60 3px,
+          #6f5b60 5px
+        );
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+        opacity: 0.92;
+      }
+
+      .coupler-bar {
+        position: absolute;
+        bottom: -4px;
+        width: 22px;
+        height: 5px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, #9b8c8a 0%, #4d4042 100%);
+      }
+
+      /* Realistic Locomotive */
+      .locomotive {
+        position: relative;
+        width: 214px;
+        height: 98px;
+        z-index: 2;
+      }
+
+      .loco-body {
+        position: relative;
+        width: 100%;
+        height: 82px;
+        background: linear-gradient(
+          180deg,
+          #fff9f6 0%,
+          #f2e3df 24%,
+          #dfcac6 52%,
+          #6b2839 54%,
+          #4c1826 88%,
+          #35101a 100%
+        );
+        border-radius: 68px 14px 8px 16px;
+        box-shadow:
+          0 12px 24px -8px rgba(58, 18, 28, 0.34),
+          inset 0 2px 3px rgba(255, 255, 255, 0.95),
+          inset 0 -3px 6px rgba(32, 8, 14, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.65);
+        overflow: visible;
+      }
+
+      /* Champagne-gold metallic waistline stripe */
+      .loco-stripe {
+        position: absolute;
+        left: 6px;
+        right: 0;
+        top: 52%;
+        height: 4px;
+        border-radius: 3px 0 0 3px;
+        background: linear-gradient(90deg, #f5d896 0%, #d4a14d 45%, #b88130 100%);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+      }
+
+      /* Windshield */
+      .loco-windshield {
+        position: absolute;
+        left: 16px;
+        top: 10px;
+        width: 58px;
+        height: 30px;
+        border-radius: 34px 8px 4px 8px;
+        background: linear-gradient(135deg, #27151c 0%, #4a2d36 45%, #1d0e14 100%);
+        border: 1.5px solid rgba(235, 212, 198, 0.55);
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.65);
+        overflow: hidden;
+      }
+
+      .loco-windshield::after {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 10px;
+        width: 18px;
+        height: 46px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.28) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: rotate(24deg);
+      }
+
+      /* Side windows on loco */
+      .loco-side-windows {
+        position: absolute;
+        right: 16px;
+        top: 15px;
+        display: flex;
+        gap: 7px;
+      }
+
+      .loco-win {
+        width: 24px;
+        height: 20px;
+        border-radius: 5px;
+        background: linear-gradient(145deg, #2c171f 0%, #462632 100%);
+        border: 1px solid rgba(226, 198, 178, 0.4);
+        box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+      }
+
+      /* Roof equipment pod */
+      .loco-roof-pod {
+        position: absolute;
+        right: 22px;
+        top: -5px;
+        width: 78px;
+        height: 6px;
+        border-radius: 5px 5px 0 0;
+        background: linear-gradient(180deg, #d8c8c5 0%, #9b8886 100%);
+      }
+
+      /* Headlight + Volumetric Beam */
+      .headlight-housing {
+        position: absolute;
+        left: -3px;
+        bottom: 18px;
+        width: 12px;
+        height: 15px;
+        border-radius: 6px 3px 3px 6px;
+        background: radial-gradient(circle at 35% 50%, #ffffff 0%, #ffefba 50%, #f0b85b 100%);
+        box-shadow:
+          0 0 14px 4px rgba(255, 224, 146, 0.85),
+          0 0 28px 8px rgba(247, 198, 108, 0.45);
+        z-index: 4;
+      }
+
+      .headlight-beam {
+        position: absolute;
+        right: calc(100% - 2px);
+        bottom: -8px;
+        width: 230px;
+        height: 70px;
+        background: linear-gradient(
+          270deg,
+          rgba(255, 234, 174, 0.42) 0%,
+          rgba(255, 224, 150, 0.16) 45%,
+          rgba(255, 224, 150, 0) 100%
+        );
+        clip-path: polygon(100% 36%, 0% 0%, 0% 100%, 100% 62%);
+        pointer-events: none;
+        filter: blur(2px);
+      }
+
+      /* Standard Passenger / Display Carriages (1, 2, 3) */
+      .carriage {
+        position: relative;
+        width: 226px;
+        height: 96px;
+        z-index: 2;
+      }
+
+      .carriage-shell {
+        position: relative;
+        width: 100%;
+        height: 80px;
+        border-radius: 13px 13px 7px 7px;
+        background: linear-gradient(
+          180deg,
+          #fffaf7 0%,
+          #f3e4e0 30%,
+          #e3ceca 64%,
+          #6b2839 66%,
+          #4b1826 100%
+        );
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        box-shadow:
+          0 12px 24px -8px rgba(58, 18, 28, 0.28),
+          inset 0 2px 3px rgba(255, 255, 255, 0.95),
+          inset 0 -3px 6px rgba(32, 8, 14, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+      }
+
+      .carriage-roof {
+        position: absolute;
+        top: -4px;
+        left: 14px;
+        right: 14px;
+        height: 5px;
+        border-radius: 5px 5px 0 0;
+        background: linear-gradient(180deg, #e7d8d5 0%, #b59f9b 100%);
+      }
+
+      .carriage-stripe {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 64%;
+        height: 3.5px;
+        background: linear-gradient(90deg, #b88130 0%, #f0cf84 50%, #b88130 100%);
+        opacity: 0.92;
+      }
+
+      /* Side End Windows */
+      .carriage-end-win {
+        position: absolute;
+        top: 18px;
+        width: 14px;
+        height: 28px;
+        border-radius: 4px;
+        background: linear-gradient(145deg, #2d171f 0%, #4a2934 100%);
+        border: 1px solid rgba(226, 198, 178, 0.35);
+        opacity: 0.85;
+      }
+
+      .carriage-end-win--left {
+        left: 9px;
+      }
+
+      .carriage-end-win--right {
+        right: 9px;
+      }
+
+      /* Realistic Digital / Frosted Glass Display Panel */
+      .display-screen {
+        position: relative;
+        z-index: 3;
+        width: 162px;
+        height: 50px;
+        margin-bottom: 6px;
+        border-radius: 10px;
+        direction: rtl;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 10px;
+        background: linear-gradient(145deg, rgba(36, 16, 24, 0.94) 0%, rgba(62, 24, 37, 0.92) 55%, rgba(44, 16, 26, 0.96) 100%);
+        border: 1.5px solid rgba(242, 207, 132, 0.65);
+        box-shadow:
+          0 4px 14px rgba(34, 10, 18, 0.34),
+          0 0 12px rgba(235, 168, 148, 0.22),
+          inset 0 1px 1px rgba(255, 255, 255, 0.25),
+          inset 0 0 14px rgba(228, 136, 152, 0.18);
+        overflow: hidden;
+      }
+
+      /* Subtle diagonal glass sheen on display screen */
+      .display-screen::after {
+        content: '';
+        position: absolute;
+        top: -20%;
+        left: -15%;
+        width: 48%;
+        height: 140%;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.14) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: rotate(22deg);
+        pointer-events: none;
+      }
+
+      .display-text {
+        position: relative;
+        z-index: 2;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 1.08rem;
+        line-height: 1.2;
+        color: #fff6f2;
+        text-shadow: 0 0 10px rgba(255, 198, 206, 0.52);
+        white-space: nowrap;
+      }
+
+      /* =======================================================
+         CARRIAGE 4: Larger VIP Golden Carriage
+         ======================================================= */
+      .carriage--vip {
+        width: 312px;
+        height: 112px;
+      }
+
+      .carriage--vip .carriage-shell {
+        height: 94px;
+        border-radius: 16px 16px 8px 8px;
+        background: linear-gradient(
+          180deg,
+          #fffdf8 0%,
+          #faeeda 24%,
+          #eed2a4 61%,
+          #6b2436 63%,
+          #471422 100%
+        );
+        border: 1.5px solid rgba(242, 207, 132, 0.92);
+        box-shadow:
+          0 16px 34px -8px rgba(102, 54, 24, 0.34),
+          0 0 28px rgba(235, 184, 88, 0.28),
+          inset 0 2px 4px rgba(255, 255, 255, 0.98),
+          inset 0 -3px 8px rgba(32, 8, 14, 0.4);
+      }
+
+      .carriage--vip .carriage-roof {
+        top: -7px;
+        left: 20px;
+        right: 20px;
+        height: 7px;
+        border-radius: 8px 8px 0 0;
+        background: linear-gradient(180deg, #fae2a8 0%, #c9923b 100%);
+        box-shadow: 0 -2px 8px rgba(240, 198, 108, 0.45);
+      }
+
+      .carriage--vip .carriage-stripe {
+        top: 61.5%;
+        height: 4.5px;
+        background: linear-gradient(90deg, #b87e22 0%, #fff0bd 50%, #b87e22 100%);
+      }
+
+      .carriage--vip .display-screen {
+        width: 248px;
+        height: 60px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+        border: 2px solid #f2cf84;
+        background: linear-gradient(135deg, rgba(42, 14, 24, 0.96) 0%, rgba(78, 24, 42, 0.94) 50%, rgba(52, 16, 26, 0.98) 100%);
+        box-shadow:
+          0 6px 20px rgba(72, 24, 34, 0.42),
+          0 0 22px rgba(242, 200, 112, 0.45),
+          inset 0 0 18px rgba(242, 190, 118, 0.26);
+        transition: box-shadow 0.8s ease, border-color 0.8s ease;
+      }
+
+      .carriage--vip.is-celebrating .display-screen {
+        box-shadow:
+          0 6px 24px rgba(72, 24, 34, 0.48),
+          0 0 34px rgba(245, 206, 116, 0.78),
+          inset 0 0 24px rgba(255, 206, 134, 0.42);
+      }
+
+      .carriage--vip .display-text {
+        font-family: 'Amiri', 'Cairo', serif;
+        font-weight: 700;
+        font-size: 1.32rem;
+        color: #fff8ea;
+        text-shadow:
+          0 0 14px rgba(255, 214, 132, 0.72),
+          0 1px 2px rgba(0, 0, 0, 0.35);
+      }
+
+      /* Realistic Bogies & Rotating Machined Wheels */
+      .bogie {
+        position: absolute;
+        bottom: 0;
+        width: 56px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 3px;
+        z-index: 3;
+      }
+
+      .bogie--left {
+        left: 20px;
+      }
+
+      .bogie--right {
+        right: 20px;
+      }
+
+      .bogie-frame {
+        position: absolute;
+        top: 1px;
+        left: 6px;
+        right: 6px;
+        height: 7px;
+        border-radius: 3px;
+        background: linear-gradient(180deg, #524246 0%, #2a1e22 100%);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+      }
+
+      .wheel {
+        position: relative;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #302428 0%, #4b3a3f 56%, #d4c5c2 78%, #8f7e7b 100%);
+        border: 1.5px solid #e6dad7;
+        box-shadow: 0 2px 4px rgba(28, 10, 16, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .carriage--vip .wheel {
+        border-color: #f0cf84;
+      }
+
+      .wheel-rotor {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        position: relative;
+        transform: rotate(var(--wheel-rot, 0rad));
+        will-change: transform;
+      }
+
+      .wheel-spoke {
+        position: absolute;
+        top: 50%;
+        left: 1px;
+        right: 1px;
+        height: 1.5px;
+        margin-top: -0.75px;
+        background: rgba(235, 220, 214, 0.72);
+      }
+
+      .wheel-spoke--v {
+        transform: rotate(90deg);
+      }
+
+      .wheel-hub {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle, #f3d285 0%, #a5772d 100%);
+      }
+
+      /* Floating Minimal Replay Pill Button */
+      .replay-btn {
+        position: fixed;
+        bottom: max(20px, env(safe-area-inset-bottom, 20px));
+        left: max(20px, env(safe-area-inset-left, 20px));
+        z-index: 30;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 10px 20px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        background: linear-gradient(145deg, rgba(255, 251, 248, 0.78) 0%, rgba(251, 236, 232, 0.68) 100%);
+        backdrop-filter: blur(16px) saturate(1.3);
+        -webkit-backdrop-filter: blur(16px) saturate(1.3);
+        color: var(--ink-primary);
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 0.92rem;
+        white-space: nowrap;
+        cursor: pointer;
+        box-shadow:
+          0 10px 24px -6px rgba(92, 36, 46, 0.16),
+          0 0 0 1px rgba(212, 161, 77, 0.2),
+          inset 0 1px 1px rgba(255, 255, 255, 0.95);
+        transition:
+          transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
+          background 180ms ease;
+      }
+
+      .replay-btn:hover {
+        transform: translate3d(0, -2px, 0);
+        box-shadow:
+          0 14px 30px -6px rgba(92, 36, 46, 0.22),
+          0 0 0 1px rgba(212, 161, 77, 0.38),
+          inset 0 1px 1px rgba(255, 255, 255, 0.98);
+      }
+
+      .replay-btn:active {
+        transform: translate3d(0, 0, 0) scale(0.97);
+      }
+
+      .replay-btn:focus-visible {
+        outline: 2px solid var(--rose-accent);
+        outline-offset: 3px;
+      }
+
+      .replay-icon {
+        width: 17px;
+        height: 17px;
+        transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .replay-btn:hover .replay-icon {
+        transform: rotate(-160deg);
+      }
+
+      /* Mobile Responsive Adjustments */
+      @media (max-width: 640px) {
+        .glass-card {
+          padding: 22px 18px;
+          border-radius: 22px;
+        }
+
+        .glass-card.is-visible.is-elevated {
+          transform: translate3d(0, calc(-21vh), 0) scale(0.92);
+        }
+
+        .train-stage {
+          top: 64%;
+          height: 185px;
+        }
+
+        .locomotive {
+          width: 162px;
+          height: 82px;
+        }
+
+        .loco-body {
+          height: 68px;
+          border-radius: 52px 12px 6px 12px;
+        }
+
+        .loco-windshield {
+          left: 12px;
+          top: 8px;
+          width: 44px;
+          height: 24px;
+        }
+
+        .loco-side-windows {
+          right: 12px;
+          top: 12px;
+        }
+
+        .loco-win {
+          width: 18px;
+          height: 16px;
+        }
+
+        .carriage {
+          width: 182px;
+          height: 82px;
+        }
+
+        .carriage-shell {
+          height: 68px;
+        }
+
+        .carriage-end-win {
+          display: none;
+        }
+
+        .display-screen {
+          width: 146px;
+          height: 44px;
+        }
+
+        .display-text {
+          font-size: 0.98rem;
+        }
+
+        .carriage--vip {
+          width: 266px;
+          height: 98px;
+        }
+
+        .carriage--vip .carriage-shell {
+          height: 82px;
+        }
+
+        .carriage--vip .display-screen {
+          width: 224px;
+          height: 54px;
+        }
+
+        .carriage--vip .display-text {
+          font-size: 1.15rem;
+        }
+
+        .bogie {
+          width: 46px;
+        }
+
+        .bogie--left {
+          left: 14px;
+        }
+
+        .bogie--right {
+          right: 14px;
+        }
+
+        .wheel {
+          width: 16px;
+          height: 16px;
+        }
+
+        .wheel-rotor {
+          width: 11px;
+          height: 11px;
+        }
+
+        .coupler {
+          width: 14px;
+        }
+
+        .coupler-bellows {
+          width: 12px;
+          height: 30px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ambient-glow {
+          animation: none;
+        }
+        .glass-card {
+          transition-duration: 0.2s;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="scene-stage" aria-label="عرض رومانسي خاص لتسنيم">
+      <!-- Ambient soft gold & rose lighting -->
+      <div class="ambient-glow ambient-glow--gold" aria-hidden="true"></div>
+      <div class="ambient-glow ambient-glow--rose" aria-hidden="true"></div>
+      <div class="ambient-glow ambient-glow--center" aria-hidden="true"></div>
+
+      <!-- Background Canvas: Rising glossy balloons & subtle warm bokeh -->
+      <canvas id="bgCanvas" class="stage-canvas" aria-hidden="true"></canvas>
+
+      <!-- Opening Scene: Sleek frosted-glass card -->
+      <section class="greeting-layer" aria-live="polite">
+        <div id="greetingCard" class="glass-card">
+          <div class="card-ornament" aria-hidden="true">
+            <span class="ornament-line"></span>
+            <svg class="ornament-heart" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="ornHeartGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#e55b72" />
+                  <stop offset="100%" stop-color="#a8243b" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                fill="url(#ornHeartGrad)"
+              />
+            </svg>
+            <span class="ornament-line"></span>
+          </div>
+
+          <h1 class="greeting-title">
+            بحبك يا أغلى الناس على قلبي.. يا <span class="highlight-name">تسنيم</span>
+          </h1>
+
+          <div class="card-ornament card-ornament--bottom" aria-hidden="true">
+            <span class="ornament-line"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Train Scene (LTR coordinate container for consistent motion physics) -->
+      <section id="trainStage" class="train-stage" aria-label="قطار الذكريات">
+        <div class="railway-track" aria-hidden="true">
+          <div class="track-shadow"></div>
+          <div class="track-ties"></div>
+          <div class="track-ballast"></div>
+          <div class="track-rail"></div>
+        </div>
+
+        <div id="trainConsist" class="train-consist">
+          <!-- Locomotive (Front, heading left) -->
+          <div class="car-wrapper locomotive">
+            <div class="car-ground-shadow"></div>
+            <div class="headlight-beam" aria-hidden="true"></div>
+            <div class="loco-roof-pod" aria-hidden="true"></div>
+            <div class="loco-body">
+              <div class="headlight-housing" aria-hidden="true"></div>
+              <div class="loco-windshield" aria-hidden="true"></div>
+              <div class="loco-side-windows" aria-hidden="true">
+                <div class="loco-win"></div>
+                <div class="loco-win"></div>
+              </div>
+              <div class="loco-stripe" aria-hidden="true"></div>
+            </div>
+            <div class="bogie bogie--left" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+            <div class="bogie bogie--right" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+          </div>
+
+          <div class="coupler" aria-hidden="true">
+            <div class="coupler-bellows"></div>
+            <div class="coupler-bar"></div>
+          </div>
+
+          <!-- Carriage 1 -->
+          <div class="car-wrapper carriage">
+            <div class="car-ground-shadow"></div>
+            <div class="carriage-roof" aria-hidden="true"></div>
+            <div class="carriage-shell">
+              <div class="carriage-end-win carriage-end-win--left" aria-hidden="true"></div>
+              <div class="display-screen" dir="rtl">
+                <span class="display-text">إنتي الأولى</span>
+              </div>
+              <div class="carriage-end-win carriage-end-win--right" aria-hidden="true"></div>
+              <div class="carriage-stripe" aria-hidden="true"></div>
+            </div>
+            <div class="bogie bogie--left" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+            <div class="bogie bogie--right" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+          </div>
+
+          <div class="coupler" aria-hidden="true">
+            <div class="coupler-bellows"></div>
+            <div class="coupler-bar"></div>
+          </div>
+
+          <!-- Carriage 2 -->
+          <div class="car-wrapper carriage">
+            <div class="car-ground-shadow"></div>
+            <div class="carriage-roof" aria-hidden="true"></div>
+            <div class="carriage-shell">
+              <div class="carriage-end-win carriage-end-win--left" aria-hidden="true"></div>
+              <div class="display-screen" dir="rtl">
+                <span class="display-text">إنتي التانية</span>
+              </div>
+              <div class="carriage-end-win carriage-end-win--right" aria-hidden="true"></div>
+              <div class="carriage-stripe" aria-hidden="true"></div>
+            </div>
+            <div class="bogie bogie--left" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+            <div class="bogie bogie--right" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+          </div>
+
+          <div class="coupler" aria-hidden="true">
+            <div class="coupler-bellows"></div>
+            <div class="coupler-bar"></div>
+          </div>
+
+          <!-- Carriage 3 -->
+          <div class="car-wrapper carriage">
+            <div class="car-ground-shadow"></div>
+            <div class="carriage-roof" aria-hidden="true"></div>
+            <div class="carriage-shell">
+              <div class="carriage-end-win carriage-end-win--left" aria-hidden="true"></div>
+              <div class="display-screen" dir="rtl">
+                <span class="display-text">إنتي التالتة</span>
+              </div>
+              <div class="carriage-end-win carriage-end-win--right" aria-hidden="true"></div>
+              <div class="carriage-stripe" aria-hidden="true"></div>
+            </div>
+            <div class="bogie bogie--left" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+            <div class="bogie bogie--right" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+          </div>
+
+          <div class="coupler" aria-hidden="true">
+            <div class="coupler-bellows"></div>
+            <div class="coupler-bar"></div>
+          </div>
+
+          <!-- Carriage 4 (VIP Golden Carriage) -->
+          <div id="vipCarriage" class="car-wrapper carriage carriage--vip">
+            <div class="car-ground-shadow"></div>
+            <div class="carriage-roof" aria-hidden="true"></div>
+            <div class="carriage-shell">
+              <div id="vipScreen" class="display-screen" dir="rtl">
+                <span class="display-text">إنتي كل حياتي يا تسنيم</span>
+              </div>
+              <div class="carriage-stripe" aria-hidden="true"></div>
+            </div>
+            <div class="bogie bogie--left" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+            <div class="bogie bogie--right" aria-hidden="true">
+              <div class="bogie-frame"></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+              <div class="wheel"><div class="wheel-rotor"><span class="wheel-spoke"></span><span class="wheel-spoke wheel-spoke--v"></span><span class="wheel-hub"></span></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Foreground Canvas: 3D-Shaded Hearts (Opening Burst + Carriage 4 Screen Burst) -->
+      <canvas id="fxCanvas" class="stage-canvas" aria-hidden="true"></canvas>
+
+      <!-- Minimal Floating Replay Pill Button -->
+      <button id="replayBtn" class="replay-btn" type="button" aria-label="إعادة العرض">
+        <svg class="replay-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+        <span>إعادة العرض</span>
+      </button>
+    </main>
+
+    <script>
+      (function () {
+        'use strict';
+
+        const bgCanvas = document.getElementById('bgCanvas');
+        const fxCanvas = document.getElementById('fxCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        const fxCtx = fxCanvas.getContext('2d');
+
+        const greetingCard = document.getElementById('greetingCard');
+        const trainStage = document.getElementById('trainStage');
+        const trainConsist = document.getElementById('trainConsist');
+        const vipCarriage = document.getElementById('vipCarriage');
+        const vipScreen = document.getElementById('vipScreen');
+        const replayBtn = document.getElementById('replayBtn');
+
+        const prefersReducedMotion =
+          window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        function resizeCanvases() {
+          width = window.innerWidth;
+          height = window.innerHeight;
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+          [bgCanvas, fxCanvas].forEach((canvas) => {
+            canvas.width = Math.floor(width * dpr);
+            canvas.height = Math.floor(height * dpr);
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+          });
+
+          bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          fxCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        resizeCanvases();
+        window.addEventListener('resize', () => {
+          resizeCanvases();
+          if (state.trainArrived) {
+            const targetX = computeVipTargetX();
+            state.trainX = targetX;
+            trainConsist.style.transform = `translate3d(${targetX.toFixed(2)}px, 0, 0)`;
+          }
+        });
+
+        /* =========================================================
+           PALETTES & 3D PARTICLE DRAWING PRIMITIVES
+           ========================================================= */
+        const HEART_PALETTES = [
+          { highlight: '#ffe4ea', mid: '#e0425f', rim: '#871429', glow: 'rgba(232, 74, 102, 0.55)' },
+          { highlight: '#fff0e6', mid: '#ea6c7a', rim: '#a3283d', glow: 'rgba(238, 114, 126, 0.5)' },
+          { highlight: '#fff7de', mid: '#e2ab51', rim: '#8f5d15', glow: 'rgba(240, 190, 96, 0.65)' },
+          { highlight: '#fde6f0', mid: '#c94366', rim: '#741734', glow: 'rgba(208, 72, 112, 0.45)' }
+        ];
+
+        const BALLOON_PALETTES = [
+          { highlight: 'rgba(255, 245, 245, 0.96)', mid: 'rgba(236, 134, 148, 0.78)', rim: 'rgba(182, 68, 86, 0.86)' },
+          { highlight: 'rgba(255, 250, 236, 0.96)', mid: 'rgba(238, 194, 122, 0.74)', rim: 'rgba(184, 128, 48, 0.84)' },
+          { highlight: 'rgba(255, 247, 242, 0.96)', mid: 'rgba(244, 172, 162, 0.76)', rim: 'rgba(196, 104, 96, 0.84)' },
+          { highlight: 'rgba(255, 252, 248, 0.96)', mid: 'rgba(232, 196, 186, 0.72)', rim: 'rgba(168, 120, 112, 0.82)' }
+        ];
+
+        function draw3DHeart(ctx, p) {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+
+          // 3D spin illusion along Y-axis
+          const spinScale = 0.65 + 0.35 * Math.cos(p.spin);
+          ctx.scale(p.size * spinScale, p.size);
+          ctx.globalAlpha = Math.max(0, Math.min(1, p.alpha));
+
+          if (p.glowing) {
+            ctx.shadowColor = p.palette.glow;
+            ctx.shadowBlur = 16;
+          } else {
+            ctx.shadowColor = 'rgba(84, 22, 34, 0.18)';
+            ctx.shadowBlur = 6;
+            ctx.shadowOffsetY = 3;
+          }
+
+          // Heart path centered at (0, 0), radius ~ 14
+          ctx.beginPath();
+          ctx.moveTo(0, 11);
+          ctx.bezierCurveTo(-2, 9.2, -14, 1.5, -14, -5.8);
+          ctx.bezierCurveTo(-14, -11.2, -9.2, -14, -4.8, -14);
+          ctx.bezierCurveTo(-2.1, -14, -0.5, -12.2, 0, -10.5);
+          ctx.bezierCurveTo(0.5, -12.2, 2.1, -14, 4.8, -14);
+          ctx.bezierCurveTo(9.2, -14, 14, -11.2, 14, -5.8);
+          ctx.bezierCurveTo(14, 1.5, 2, 9.2, 0, 11);
+          ctx.closePath();
+
+          // Volumetric 3D radial shading
+          const grad = ctx.createRadialGradient(-4.5, -6.5, 1.2, 0, -1, 16);
+          grad.addColorStop(0, p.palette.highlight);
+          grad.addColorStop(0.38, p.palette.mid);
+          grad.addColorStop(1, p.palette.rim);
+          ctx.fillStyle = grad;
+          ctx.fill();
+
+          // Reset shadow for crisp specular highlight
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetY = 0;
+
+          // Glossy specular crescent on upper-left lobe
+          ctx.beginPath();
+          ctx.ellipse(-5.6, -7.4, 3.2, 1.65, -0.55, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.56)';
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        function drawGlossyBalloon(ctx, b, timeSec) {
+          ctx.save();
+          ctx.translate(b.x, b.y);
+          ctx.rotate(b.tilt);
+          ctx.globalAlpha = b.alpha;
+
+          const rx = b.radius;
+          const ry = b.radius * 1.18;
+
+          // Delicate swaying silk string
+          const sway = Math.sin(timeSec * 2.2 + b.phase) * 9;
+          ctx.beginPath();
+          ctx.moveTo(0, ry + 3);
+          ctx.quadraticCurveTo(sway * 0.6, ry + b.stringLen * 0.45, sway, ry + b.stringLen);
+          ctx.strokeStyle = 'rgba(170, 128, 122, 0.42)';
+          ctx.lineWidth = 1.1;
+          ctx.stroke();
+
+          // Knot
+          ctx.beginPath();
+          ctx.moveTo(-3, ry + 4);
+          ctx.lineTo(3, ry + 4);
+          ctx.lineTo(0, ry);
+          ctx.closePath();
+          ctx.fillStyle = b.palette.rim;
+          ctx.fill();
+
+          // Soft ambient shadow
+          ctx.shadowColor = 'rgba(112, 54, 62, 0.14)';
+          ctx.shadowBlur = 12;
+          ctx.shadowOffsetY = 6;
+
+          // Balloon body silhouette
+          ctx.beginPath();
+          ctx.moveTo(0, -ry);
+          ctx.bezierCurveTo(rx * 1.05, -ry, rx * 1.12, ry * 0.25, 0, ry);
+          ctx.bezierCurveTo(-rx * 1.12, ry * 0.25, -rx * 1.05, -ry, 0, -ry);
+          ctx.closePath();
+
+          const grad = ctx.createRadialGradient(-rx * 0.34, -ry * 0.38, rx * 0.08, 0, 0, ry * 1.15);
+          grad.addColorStop(0, b.palette.highlight);
+          grad.addColorStop(0.32, b.palette.mid);
+          grad.addColorStop(1, b.palette.rim);
+          ctx.fillStyle = grad;
+          ctx.fill();
+
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetY = 0;
+
+          // Subtle rim reflection on opposite lower edge
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.32)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Glossy curved highlight reflection
+          ctx.beginPath();
+          ctx.ellipse(-rx * 0.34, -ry * 0.34, rx * 0.19, ry * 0.32, -0.38, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.52)';
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(-rx * 0.42, -ry * 0.02, rx * 0.07, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.44)';
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        /* =========================================================
+           SCENE STATE & PARTICLE POOLS
+           ========================================================= */
+        let hearts = [];
+        let balloons = [];
+        let bokehMotes = [];
+
+        const state = {
+          running: true,
+          startTime: 0,
+          lastTime: 0,
+          cardShown: false,
+          cardElevated: false,
+          trainStarted: false,
+          trainArrived: false,
+          vipBurstFired: false,
+          trainStartDelay: 3.5,
+          trainDuration: 12.2,
+          trainStartX: 0,
+          trainTargetX: 0,
+          trainX: 0,
+          wheelAngle: 0,
+          lastVipEmberAt: 0
+        };
+
+        function computeVipTargetX() {
+          const vipCenterLocal = vipCarriage.offsetLeft + vipCarriage.offsetWidth / 2;
+          return width / 2 - vipCenterLocal;
+        }
+
+        function spawnOpeningHeartExplosion() {
+          const count = width < 640 ? 48 : 74;
+          const originX = width * 0.5;
+          const originY = height * 0.48;
+
+          for (let i = 0; i < count; i++) {
+            const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.35;
+            const speed = (width < 640 ? 150 : 210) + Math.random() * 290;
+            hearts.push({
+              x: originX + (Math.random() - 0.5) * 32,
+              y: originY + (Math.random() - 0.5) * 24,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed - 95,
+              gravity: 135 + Math.random() * 65,
+              drag: 0.982,
+              size: 0.55 + Math.random() * 0.78,
+              rot: (Math.random() - 0.5) * 0.5,
+              vRot: (Math.random() - 0.5) * 1.4,
+              spin: Math.random() * Math.PI * 2,
+              vSpin: 1.8 + Math.random() * 2.4,
+              flutterPhase: Math.random() * Math.PI * 2,
+              alpha: 1,
+              life: 0,
+              maxLife: 2.6 + Math.random() * 1.5,
+              palette: HEART_PALETTES[i % HEART_PALETTES.length],
+              glowing: i % 3 === 0
+            });
+          }
+        }
+
+        function spawnVipScreenHeartBurst(count, isAmbientEmber) {
+          const rect = vipScreen.getBoundingClientRect();
+          if (!rect || rect.width === 0) return;
+
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+
+          for (let i = 0; i < count; i++) {
+            const spreadAngle = -Math.PI / 2 + (Math.random() - 0.5) * (isAmbientEmber ? 1.1 : 2.35);
+            const speed = isAmbientEmber
+              ? 65 + Math.random() * 75
+              : (width < 640 ? 140 : 185) + Math.random() * 240;
+
+            hearts.push({
+              x: cx + (Math.random() - 0.5) * (rect.width * 0.72),
+              y: cy + (Math.random() - 0.5) * (rect.height * 0.55),
+              vx: Math.cos(spreadAngle) * speed,
+              vy: Math.sin(spreadAngle) * speed - (isAmbientEmber ? 25 : 40),
+              gravity: isAmbientEmber ? 18 : 95 + Math.random() * 45,
+              drag: isAmbientEmber ? 0.992 : 0.985,
+              size: isAmbientEmber ? 0.36 + Math.random() * 0.38 : 0.52 + Math.random() * 0.76,
+              rot: (Math.random() - 0.5) * 0.4,
+              vRot: (Math.random() - 0.5) * 1.2,
+              spin: Math.random() * Math.PI * 2,
+              vSpin: 2.2 + Math.random() * 2.5,
+              flutterPhase: Math.random() * Math.PI * 2,
+              alpha: 1,
+              life: 0,
+              maxLife: isAmbientEmber ? 2.4 + Math.random() * 1.0 : 2.5 + Math.random() * 1.4,
+              palette: i % 2 === 0 ? HEART_PALETTES[2] : HEART_PALETTES[i % HEART_PALETTES.length],
+              glowing: true
+            });
+          }
+        }
+
+        function seedBalloons() {
+          balloons = [];
+          const count = width < 640 ? 11 : 17;
+          for (let i = 0; i < count; i++) {
+            const radius = (width < 640 ? 17 : 21) + Math.random() * 14;
+            balloons.push({
+              x: width * (0.06 + Math.random() * 0.88),
+              y: height + radius * 2 + Math.random() * (height * 0.65),
+              vy: -(48 + Math.random() * 34),
+              radius,
+              stringLen: 38 + Math.random() * 28,
+              phase: Math.random() * Math.PI * 2,
+              swayAmp: 12 + Math.random() * 16,
+              tilt: 0,
+              alpha: 0.78 + Math.random() * 0.2,
+              palette: BALLOON_PALETTES[i % BALLOON_PALETTES.length]
+            });
+          }
+        }
+
+        function seedBokeh() {
+          bokehMotes = [];
+          const count = width < 640 ? 18 : 28;
+          for (let i = 0; i < count; i++) {
+            bokehMotes.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              r: 2 + Math.random() * 4.5,
+              vy: -(6 + Math.random() * 10),
+              phase: Math.random() * Math.PI * 2,
+              alpha: 0.14 + Math.random() * 0.26,
+              gold: i % 2 === 0
+            });
+          }
+        }
+
+        /* Smooth monotonic train arrival curve:
+           - Gentle acceleration out of start
+           - Steady comfortable reading cruise across Carriages 1, 2, 3
+           - Silky smooth deceleration to rest when Carriage 4 reaches center */
+        function trainProgressCurve(u) {
+          if (u <= 0) return 0;
+          if (u >= 1) return 1;
+          // Quintic-blended easeInOut with extended gentle deceleration tail
+          if (u < 0.12) {
+            const t = u / 0.12;
+            return 0.08 * (t * t * (3 - 2 * t));
+          }
+          if (u < 0.72) {
+            const t = (u - 0.12) / 0.6;
+            return 0.08 + 0.66 * t;
+          }
+          const t = (u - 0.72) / 0.28;
+          const easedTail = 1 - Math.pow(1 - t, 3);
+          return 0.74 + 0.26 * easedTail;
+        }
+
+        function startSequence() {
+          hearts = [];
+          state.cardShown = false;
+          state.cardElevated = false;
+          state.trainStarted = false;
+          state.trainArrived = false;
+          state.vipBurstFired = false;
+          state.wheelAngle = 0;
+          state.lastVipEmberAt = 0;
+
+          greetingCard.classList.remove('is-visible', 'is-elevated');
+          trainStage.classList.remove('is-active');
+          vipCarriage.classList.remove('is-celebrating');
+
+          state.trainStartX = width + 70;
+          state.trainTargetX = computeVipTargetX();
+          state.trainX = state.trainStartX;
+
+          const totalDist = Math.abs(state.trainStartX - state.trainTargetX);
+          state.trainDuration = Math.max(10.5, Math.min(13.8, totalDist / 138));
+
+          trainConsist.style.transform = `translate3d(${state.trainStartX}px, 0, 0)`;
+          trainConsist.style.setProperty('--wheel-rot', '0rad');
+
+          seedBalloons();
+          seedBokeh();
+
+          if (prefersReducedMotion) {
+            greetingCard.classList.add('is-visible', 'is-elevated');
+            trainStage.classList.add('is-active');
+            state.trainX = state.trainTargetX;
+            state.trainArrived = true;
+            trainConsist.style.transform = `translate3d(${state.trainTargetX}px, 0, 0)`;
+            vipCarriage.classList.add('is-celebrating');
+            spawnOpeningHeartExplosion();
+            setTimeout(() => spawnVipScreenHeartBurst(36, false), 150);
+            state.startTime = performance.now();
+            state.lastTime = state.startTime;
+            return;
+          }
+
+          spawnOpeningHeartExplosion();
+
+          const now = performance.now();
+          state.startTime = now;
+          state.lastTime = now;
+        }
+
+        function tick(now) {
+          const dt = Math.min(0.05, Math.max(0.001, (now - state.lastTime) / 1000));
+          state.lastTime = now;
+          const elapsed = (now - state.startTime) / 1000;
+
+          // 1. Timeline choreography
+          if (!prefersReducedMotion) {
+            if (!state.cardShown && elapsed >= 0.32) {
+              state.cardShown = true;
+              greetingCard.classList.add('is-visible');
+            }
+
+            if (!state.cardElevated && elapsed >= 3.25) {
+              state.cardElevated = true;
+              greetingCard.classList.add('is-elevated');
+            }
+
+            if (!state.trainStarted && elapsed >= state.trainStartDelay) {
+              state.trainStarted = true;
+              trainStage.classList.add('is-active');
+              state.trainTargetX = computeVipTargetX();
+            }
+
+            if (state.trainStarted && !state.trainArrived) {
+              const trainElapsed = elapsed - state.trainStartDelay;
+              const u = Math.min(1, trainElapsed / state.trainDuration);
+              const eased = trainProgressCurve(u);
+              const nextX = state.trainStartX + (state.trainTargetX - state.trainStartX) * eased;
+              const dx = state.trainX - nextX;
+              state.trainX = nextX;
+
+              // Wheel radius ~ 9.5px on desktop, 8px on mobile
+              const wheelR = width < 640 ? 8 : 9.5;
+              state.wheelAngle -= dx / wheelR;
+
+              trainConsist.style.transform = `translate3d(${nextX.toFixed(2)}px, 0, 0)`;
+              trainConsist.style.setProperty('--wheel-rot', `${state.wheelAngle.toFixed(4)}rad`);
+
+              if (!state.vipBurstFired && u >= 0.93) {
+                state.vipBurstFired = true;
+                vipCarriage.classList.add('is-celebrating');
+                spawnVipScreenHeartBurst(width < 640 ? 44 : 64, false);
+              }
+
+              if (u >= 1) {
+                state.trainArrived = true;
+                state.lastVipEmberAt = elapsed;
+              }
+            }
+
+            // Gentle continuing glowing heart embers from Carriage 4's screen after stopping
+            if (state.trainArrived && elapsed - state.lastVipEmberAt >= 0.36) {
+              state.lastVipEmberAt = elapsed;
+              if (hearts.length < 95) {
+                spawnVipScreenHeartBurst(2, true);
+              }
+            }
+          }
+
+          // 2. Render Background Canvas (Bokeh + Glossy Floating Balloons)
+          bgCtx.clearRect(0, 0, width, height);
+
+          for (let i = 0; i < bokehMotes.length; i++) {
+            const m = bokehMotes[i];
+            m.y += m.vy * dt;
+            if (m.y < -12) {
+              m.y = height + 12;
+              m.x = Math.random() * width;
+            }
+            const pulse = 0.65 + 0.35 * Math.sin(elapsed * 1.6 + m.phase);
+            bgCtx.beginPath();
+            bgCtx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+            bgCtx.fillStyle = m.gold
+              ? `rgba(236, 192, 114, ${m.alpha * pulse})`
+              : `rgba(235, 152, 162, ${m.alpha * pulse})`;
+            bgCtx.fill();
+          }
+
+          for (let i = 0; i < balloons.length; i++) {
+            const b = balloons[i];
+            b.y += b.vy * dt;
+            const drift = Math.sin(elapsed * 1.15 + b.phase) * b.swayAmp * dt;
+            b.x += drift;
+            b.tilt = Math.sin(elapsed * 1.15 + b.phase) * 0.08;
+
+            if (b.y < -b.radius * 2 - b.stringLen - 30) {
+              b.y = height + b.radius * 2 + Math.random() * 80;
+              b.x = width * (0.06 + Math.random() * 0.88);
+            }
+
+            drawGlossyBalloon(bgCtx, b, elapsed);
+          }
+
+          // 3. Render Foreground Canvas (3D-Shaded Hearts)
+          fxCtx.clearRect(0, 0, width, height);
+
+          for (let i = hearts.length - 1; i >= 0; i--) {
+            const h = hearts[i];
+            h.life += dt;
+            if (h.life >= h.maxLife) {
+              hearts.splice(i, 1);
+              continue;
+            }
+
+            const dragFactor = Math.pow(h.drag, dt * 60);
+            h.vx *= dragFactor;
+            h.vy = h.vy * dragFactor + h.gravity * dt;
+            h.x += (h.vx + Math.sin(elapsed * 3.4 + h.flutterPhase) * 24) * dt;
+            h.y += h.vy * dt;
+            h.rot += h.vRot * dt;
+            h.spin += h.vSpin * dt;
+
+            const progress = h.life / h.maxLife;
+            h.alpha = progress > 0.65 ? 1 - (progress - 0.65) / 0.35 : 1;
+
+            draw3DHeart(fxCtx, h);
+          }
+
+          requestAnimationFrame(tick);
+        }
+
+        replayBtn.addEventListener('click', () => {
+          startSequence();
+        });
+
+        // Start immediately on page load
+        startSequence();
+        requestAnimationFrame(tick);
+      })();
+    </script>
+  </body>
+</html>
